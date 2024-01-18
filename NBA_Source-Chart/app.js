@@ -85,33 +85,48 @@ const warriorsGame = [
   },
 ];
 
-const ulParent = document.createElement("ul");
-for (let game of warriorsGame) {
-  const {
-    //destructor method used
-    homeTeam,
-    awayTeam,
-  } = game;
-  const gameLi = document.createElement("li");
-  //console.log(awayTeam.team, homeTeam.team)
-  const { 
-    team: hTeam, 
-    points: hPoints 
-  } = homeTeam;
-  const { 
-    team: aTeam, 
-    points: aPoints 
-  } = awayTeam;
-  const teamNames = `${a.Team} @ ${h.Team}`;
-  let scoreLine;
-  if(aPoints > hPoints) {
-    const scoreLine = `<b>${a.Points}</b>-${h.Points}`;
-  } else {
-    const scoreLine = `${a.Points}-<b>${h.Points}</b>`;
+const makeChart = (games, targetTeam) => {
+  const ulParent = document.createElement("ul");
+  for (let game of games) {
+    // const {
+    //   //destructor method used
+    //   homeTeam,
+    //   awayTeam,
+    // } = game;
+    const gameLi = document.createElement('ul');
+    gameLi.innerHTML = getScoreLine(game);
+    gameLi.classList.add(isWinner(game, targetTeam) ? 'win':'loss');
+    // gameLi.innerHTML = `${teamNames} ${scoreLine}`;
+    // console.log(scoreLine);
+    ulParent.appendChild(gameLi);
   }
-  gameLi.innerText = `${teamNames} ${scoreLine}`;
-  console.log(scoreLine);
-  ulParent.appendChild(gameLi);
-}
+  return ulParent;
+};
 
-document.body.prepend(ulParent);
+const isWinner = ({ homeTeam, awayTeam }, targetTeam) => {
+  const target = homeTeam.team === targetTeam ? homeTeam : awayTeam;
+  return target.isWinner;
+};
+
+const getScoreLine = ({homeTeam, awayTeam,}) => {
+  const { team: hTeam, points: hPoints } = homeTeam;
+  const { team: aTeam, points: aPoints } = awayTeam;
+  const teamNames = `${aTeam} @ ${hTeam}`;
+  let scoreLine;
+  if (aPoints > hPoints) {
+    scoreLine = `<b>${aPoints}</b>-${hPoints}`;
+  } else {
+    scoreLine = `${aPoints}-<b>${hPoints}</b>`;
+  }
+  return `${teamNames} ${scoreLine}`;
+};
+
+// const chart1 = makeChart(data);
+// document.body.prepend(chart1);
+
+const gsSection = document.querySelector('#gs');
+const houstonSection = document.querySelector('#hr');
+const gsChart = makeChart(warriorsGame, 'Golden State');
+const hrChart = makeChart(warriorsGame, 'Houston');
+gsSection.appendChild(gsChart);
+houstonSection.appendChild(hrChart);
