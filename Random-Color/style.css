@@ -1,0 +1,17 @@
+button {
+  width: 150px;
+  height: 60px;
+  font-size: large;
+  font-weight: bold;
+  border-radius: 5%;
+  border-style: none;
+}
+
+body {
+  background-color: black;
+  
+}
+
+h1 {
+  color: white
+}
